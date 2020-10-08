@@ -153,10 +153,7 @@ add_filter('woocommerce_get_price_html', __NAMESPACE__.'\\change_linked_price_di
 function display_current_linked_price(){
     $product = wc_get_product(get_the_id());
 
-    if ($product->is_type('variable') ) {
-        
-    }
-    elseif(\Iconic_WLV_Product::get_linked_variations_data(get_the_id())){
+    if(\Iconic_WLV_Product::get_linked_variations_data(get_the_id() || $product->is_type('variable') && (get_min_product_price($product) === get_max_product_price($product)))){
         
 
 
