@@ -64,7 +64,7 @@ function get_min_linked_price($product)
         $prices = [];
 
         foreach($related_posts as $related_post){
-            $rel_product = new \WC_Product($related_post);
+            $rel_product = wc_get_product($related_post);
             $prices[] = get_min_product_price($rel_product);
         
         }
@@ -96,13 +96,14 @@ function get_max_linked_price($product)
         $prices = [];
     
         foreach($related_posts as $related_post){
-            $rel_product = new \WC_Product($related_post);
-                $prices[] = get_max_product_price($rel_product);
+            $rel_product = wc_get_product($related_post);
+            $prices[] = get_max_product_price($rel_product);
 
-            
-        }
     
-        return max($prices);
+        }
+
+        
+            return max($prices);
     
     }
     else{
@@ -129,12 +130,12 @@ function change_linked_price_display( $price, $product )
         $max = wc_price(get_max_linked_price($product));
         $min = wc_price(get_min_linked_price($product));
 
-        if($max === $min){
+        if($max === $min) {
             return $price;
         }
         elseif(!is_singular('product')) {
 
-            return 'From '.$max.' + VAT';
+            return 'From '.$min.' + VAT';
         }
 
         else{
@@ -148,3 +149,20 @@ function change_linked_price_display( $price, $product )
 }
 
 add_filter('woocommerce_get_price_html', __NAMESPACE__.'\\change_linked_price_display', 2, 10);
+
+function display_current_linked_price(){
+    $product = wc_get_product(get_the_id());
+
+    if ($product->is_type('variable') ) {
+        
+    }
+    else{
+
+
+       echo \sprintf( '<div class="woocommerce-variation-price"><span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">£</span>%s</bdi></span></span></div>',$product->get_price());
+    }
+
+
+}
+
+add_action('woocommerce_single_product_summary', __NAMESPACE__.'\\display_current_linked_price',29);
