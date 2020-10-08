@@ -156,7 +156,8 @@ function display_current_linked_price(){
     if ($product->is_type('variable') ) {
         
     }
-    else{
+    elseif(\Iconic_WLV_Product::get_linked_variations_data(get_the_id())){
+        
 
 
        echo \sprintf( '<div class="woocommerce-variation-price"><span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">£</span>%s</bdi></span></span></div>',$product->get_price());
