@@ -120,9 +120,10 @@ function change_linked_price_display( $price, $product )
 
 
     /**
+     * Exclude from Admin,
      * If we are getting the price for a variation we return as usual
      */
-    if ($product->get_parent_id() ) {
+    if (is_admin() || $product->get_parent_id() ) {
         return $price;
     }
     else{
