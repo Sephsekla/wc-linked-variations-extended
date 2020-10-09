@@ -65,7 +65,10 @@ function get_min_linked_price($product)
 
         foreach($related_posts as $related_post){
             $rel_product = wc_get_product($related_post);
-            $prices[] = get_min_product_price($rel_product);
+
+            if($rel_product) {
+                $prices[] = get_min_product_price($rel_product);
+            }
         
         }
 
@@ -97,7 +100,12 @@ function get_max_linked_price($product)
     
         foreach($related_posts as $related_post){
             $rel_product = wc_get_product($related_post);
-            $prices[] = get_max_product_price($rel_product);
+
+            if($rel_product) {
+
+                $prices[] = get_max_product_price($rel_product);
+
+            }
 
     
         }
@@ -151,17 +159,18 @@ function change_linked_price_display( $price, $product )
 
 add_filter('woocommerce_get_price_html', __NAMESPACE__.'\\change_linked_price_display', 2, 10);
 
-function display_current_linked_price(){
+function display_current_linked_price()
+{
     $product = wc_get_product(get_the_id());
 
-    if(\Iconic_WLV_Product::get_linked_variations_data(get_the_id()) && !$product->is_type('variable') || $product->is_type('variable') && (get_min_product_price($product) === get_max_product_price($product))){
+    if(\Iconic_WLV_Product::get_linked_variations_data(get_the_id()) && !$product->is_type('variable') || $product->is_type('variable') && (get_min_product_price($product) === get_max_product_price($product))) {
         
 
 
-       echo \sprintf( '<div class="woocommerce-variation-price"><span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">£</span>%s</bdi></span></span></div>',$product->get_price());
+        echo \sprintf('<div class="woocommerce-variation-price"><span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">£</span>%s</bdi></span></span></div>', $product->get_price());
     }
 
 
 }
 
-add_action('woocommerce_single_product_summary', __NAMESPACE__.'\\display_current_linked_price',29);
+add_action('woocommerce_single_product_summary', __NAMESPACE__.'\\display_current_linked_price', 29);
