@@ -43,6 +43,9 @@ function new_title($title, $id)
 function product_exclusion_list()
 {
 
+    if ( false === ( $exclude = \get_transient( 'wclve_exclude_list' ) ) ) {
+
+
     $link_query = new \WP_Query(
         array(
             'post_type' => 'cpt_iconic_wlv',
@@ -73,10 +76,15 @@ function product_exclusion_list()
 
         $exclude = array_values(array_diff($exclude, $include));
 
+        \set_transient( 'wclve_exclude_list', $exclude, 12 * HOUR_IN_SECONDS );
+
 
     }
 
         wp_reset_postdata();
+
+
+}
 
 
 
