@@ -139,17 +139,19 @@ function change_linked_price_display( $price, $product )
         $max = wc_price(get_max_linked_price($product));
         $min = wc_price(get_min_linked_price($product));
 
+        $suffix = \wc_prices_include_tax() ? '' : ' +VAT';
+
         if($max === $min) {
             return $price;
         }
         elseif(!is_singular('product')) {
 
-            return 'From '.$min.' + VAT';
+            return 'From '.$min.$suffix;
         }
 
         else{
     
-            return $min.' - '.$max.' +VAT';
+            return $min.' - '.$max.$suffix;
         }
 
     }
