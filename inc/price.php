@@ -56,7 +56,7 @@ function get_max_product_price($product)
 function get_min_linked_price($product)
 {
 
-    $vars = \Iconic_WLV_Product::get_linked_variations_data($product->id);
+    $vars = \Iconic_WLV_Product::get_linked_variations_data($product->get_id());
 
     if($vars && is_array($vars['group']->product_ids['array'])) {
         $related_posts = $vars['group']->product_ids['array'];
@@ -91,7 +91,7 @@ function get_min_linked_price($product)
 function get_max_linked_price($product)
 {
 
-    $vars = \Iconic_WLV_Product::get_linked_variations_data($product->id);
+    $vars = \Iconic_WLV_Product::get_linked_variations_data($product->get_id());
     
     if($vars && is_array($vars['group']->product_ids['array'])) {
         $related_posts = $vars['group']->product_ids['array'];
@@ -139,7 +139,7 @@ function change_linked_price_display( $price, $product )
         $max = wc_price(get_max_linked_price($product));
         $min = wc_price(get_min_linked_price($product));
 
-        $suffix = \wc_prices_include_tax() ? '' : ' +VAT';
+        $suffix = 'incl' === get_option( 'woocommerce_tax_display_shop' ) ? '' : ' +VAT';
 
         if($max === $min) {
             return $price;
@@ -169,7 +169,7 @@ function display_current_linked_price()
         
 
 
-        echo \sprintf('<div class="woocommerce-variation-price"><span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">£</span>%s</bdi></span></span></div>', $product->get_price());
+        echo \sprintf('<div class="woocommerce-variation-price"><span class="price"><span class="woocommerce-Price-amount amount"><bdi>%s</bdi></span></span></div>', wc_price( wc_get_price_to_display( $product ) ));
     }
 
 
